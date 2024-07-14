@@ -11,8 +11,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("SOCKET_SECRET")
-# socketio = SocketIO(app, cors_allowed_origins="*.ngrok-free.app, http://localhost:*")
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, async_mode='eventlet')
 log_file_path = "/var/log/messaging_system.log"
 log_tailing_active = threading.Event()
 
@@ -56,7 +55,7 @@ def tail_log():
         while log_tailing_active.is_set():
             line = f.readline()
             if not line:
-                time.sleep(0.1)
+                socketio.sleep(0.5)
                 continue
             socketio.emit('logs_update', {'data': line}, namespace="/logs")
 
@@ -66,24 +65,13 @@ def read_all_logs():
     
 @app.route('/logs', methods=['GET'])
 def start_log_tailing():
-    try:
-        if os.path.exists(log_file_path):
-            with open(log_file_path, 'r') as log_file:
-                logs = log_file.read()
-            return Response(logs, mimetype='text/plain')
-        else:
-            return "Log file not found.", 404
-    except Exception as e:
-        return str(e), 500
-
-    # user_agent = request.headers.get('User-Agent')
-    # if 'Mozilla' not in user_agent:
-    #     return send_file(log_file_path, as_attachment=True)
-    
-    # else:
-    #     if not log_tailing_active.is_set():
-    #         socketio.start_background_task(tail_log)
-    #     return render_template('logs.html')
+    user_agent = request.headers.get('User-Agent')
+    if 'Mozilla' not in user_agent:
+        return send_file(log_file_path, as_attachment=True)
+    else:
+        if not log_tailing_active.is_set():
+            socketio.start_background_task(tail_log)
+        return render_template('logs.html')
 
 @socketio.on('connect', namespace='/logs')
 def handle_connect():

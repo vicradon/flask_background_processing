@@ -1,42 +1,42 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Flask Background Processing logs</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.min.js"></script>
-    <script type="text/javascript">
-        window.onload = function () {
-            var socket = io("/logs");
 
-            socket.on("connect", function () {
-                console.log("Connected to server");
-            });
+<head>
+  <title>Flask Background Processing logs</title>
+  <script src={{ url_for("static", filename="socket.io.min.js" ) }}></script>
+  <script type="text/javascript">
+    window.onload = function () {
+      var socket = io("/logs");
 
-            socket.on("initial_logs", function (data) {
-                const logElement = document.getElementById("logs");
-                if (data.data) {
-                logElement.innerHTML += data.data.replace(/\n/g, '<br>');
-                logElement.scrollTop = logElement.scrollHeight;
-                }
-            });
+      socket.on("connect", function () {
+        console.log("Connected to server");
+      });
 
-            socket.on("logs_update", function (data) {
-                const logElement = document.getElementById("logs");
-                if (data.data) {
-                logElement.innerHTML += data.data.replace(/\n/g, '<br>');
-                logElement.scrollTop = logElement.scrollHeight;
-                }
-            });
+      socket.on("initial_logs", function (data) {
+        const logElement = document.getElementById("logs");
+        if (data.data) {
+          logElement.innerHTML += data.data.replace(/\n/g, '<br>');
+          logElement.scrollTop = logElement.scrollHeight;
+        }
+      });
 
-            socket.on("disconnect", function () {
-                console.log("Disconnected from server");
-            });
-        };
-    </script>
-  </head>
-  <body>
-    <div
-      id="logs"
-      style="white-space: pre-wrap; overflow-y: scroll; height: 400px"
-    ></div>
-  </body>
+      socket.on("logs_update", function (data) {
+        const logElement = document.getElementById("logs");
+        if (data.data) {
+          logElement.innerHTML += data.data.replace(/\n/g, '<br>');
+          logElement.scrollTop = logElement.scrollHeight;
+        }
+      });
+
+      socket.on("disconnect", function () {
+        console.log("Disconnected from server");
+      });
+    };
+  </script>
+</head>
+
+<body>
+  <div id="logs" style="white-space: pre-wrap; overflow-y: scroll; height: 400px"></div>
+</body>
+
 </html>
