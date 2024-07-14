@@ -27,7 +27,7 @@ MAILTRAP_PASSWORD="your_secret"
 
 ### Running the application
 
-You could run the app in two ways, either managed using pm2 which can handle starts and restarts, or by running the scripts/runflask.sh directly. To run using pm2, ensure you have node.js installed, version 20 or higher. The snippet below installs pm2 globally and runs the app in background:
+You could run the app in two ways, either managed using pm2 which can handle starts and restarts, or by running the scripts/run_flask_and_celery.sh directly. To run using pm2, ensure you have node.js installed, version 20 or higher. The snippet below installs pm2 globally and runs the app in background:
 
 ```sh
 npm i -g pm2
@@ -38,7 +38,7 @@ pm2 list
 
 If you wish to run directly, simly run `bash scripts/run_flask_and_celery.sh`
 
-PS: if you want to run locally, you can simply source the environment and use python app.py like so:
+PS: if you want to run the development server, you can simply source the environment and use python app.py like so:
 
 ```sh
 source .venv/bin/activate
