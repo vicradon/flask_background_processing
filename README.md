@@ -23,7 +23,10 @@ After this basic setup is complete, you should create the required environment v
 ```.env
 MAILTRAP_USER="api"
 MAILTRAP_PASSWORD="your_secret"
+SOCKET_SECRET="I_LOVE_SECRETS"
 ```
+
+The socket secret is to be used by socket.io because this application does live logging.
 
 ### Running the application
 
@@ -70,7 +73,7 @@ screen -S myngrok
 ngrok http 800
 
 # detach from the screen
-Ctrl A Ctrl D 
+Ctrl A Ctrl D
 ```
 
 To list all screens:
@@ -80,11 +83,6 @@ screen -ls
 ```
 
 to re-attach to the screen:
-
-```sh
-screen -r myngrok
-# or screen -r <screen_number>
-```
 
 ## Contributing
 
